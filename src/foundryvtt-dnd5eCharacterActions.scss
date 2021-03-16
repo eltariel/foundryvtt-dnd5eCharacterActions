@@ -23,3 +23,18 @@
 
   @import './styles/actions.scss';
 }
+
+/* Override this if in your sheet styles if you want the control label to show up. */
+.item-action-filter-override {
+  .control-label {
+    display: none;
+  }
+
+  &.included {
+    &:hover {
+      .fa-star {
+        font-weight: 400;
+      }
+    }
+  }
+}

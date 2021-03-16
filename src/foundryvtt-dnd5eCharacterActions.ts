@@ -3,6 +3,7 @@ import { registerSettings } from './module/settings';
 import { MODULE_ABBREV, MODULE_ID, MySettings, TEMPLATES } from './module/constants';
 import { log } from './module/helpers';
 import { getActorActionsData } from './module/getActorActionsData';
+import { addFavoriteControls } from './module/handleFavoriteControls';
 
 Handlebars.registerHelper(`${MODULE_ABBREV}-isEmpty`, (input: Object | Array<any> | Set<any>) => {
   if (input instanceof Array) {
@@ -101,6 +102,8 @@ Hooks.on('renderActorSheet5e', (app, html, data) => {
     html,
     data,
   });
+
+  addFavoriteControls(app, html, data);
 
   // Deprecated
   if (actionsActionsListRenderers.has(app.appId)) {
