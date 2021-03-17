@@ -1,8 +1,8 @@
-import { MODULE_ID, MySettings } from './constants';
+import { MODULE_ID, MyFlags, MySettings } from './constants';
 import { log, getActivationType, isActiveItem } from './helpers';
 
 export function getActorActionsData(actor: Actor5eCharacter) {
-  // within each activation time, we want to display: Items which do damange, Spells which do damage, Features
+  // within each activation time, we want to display: Items which do damage, Spells which do damage, Features
   // MUTATED
   const actionsData: Record<ActivationType5e, Set<Partial<Item5e>>> = {
     action: new Set(),
@@ -133,5 +133,25 @@ export function getActorActionsData(actor: Actor5eCharacter) {
   } catch (e) {
     log(true, 'error trying to digest features', e);
   }
+
+  try {
+    const filterOverrides: Item5e[] = actor.items.filter((item: Item5e) => {
+      return item.getFlag(MODULE_ID, MyFlags.filterOverride) !== undefined;
+    });
+
+    // MUTATES actionsData
+    filterOverrides.forEach((item) => {
+      const activationType = getActivationType(item.data.data.activation?.type);
+
+      if (item.getFlag(MODULE_ID, MyFlags.filterOverride)) {
+        actionsData[activationType].add(item);
+      } else {
+        actionsData[activationType].delete(item);
+      }
+    });
+  } catch (e) {
+    log(true, 'error trying to digest features', e);
+  }
+
   return actionsData;
 }
