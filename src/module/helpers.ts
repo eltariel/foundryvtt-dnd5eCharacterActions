@@ -17,7 +17,7 @@ export function getActivationType(activationType?: string) {
       return activationType;
 
     default:
-      return 'special';
+      return 'other';
   }
 }
 
