@@ -1,5 +1,5 @@
 import { MODULE_ABBREV, MODULE_ID, MyFlags, MySettings } from './constants';
-import { log, getActivationType, isActiveItem } from './helpers';
+import { log, getActivationType, isActiveItem, isItemInActionList } from './helpers';
 
 export function addFavoriteControls(
   app: Application & {
@@ -9,7 +9,7 @@ export function addFavoriteControls(
   data: ActorSheet5eCharacterSheetData
 ) {
   function createFavButton(filterOverride: boolean) {
-    return `<a class="item-control item-action-filter-override ${filterOverride ? 'included' : ''}" title="${
+    return `<a class="item-control item-action-filter-override ${filterOverride ? 'active' : ''}" title="${
       filterOverride
         ? game.i18n.localize(`${MODULE_ABBREV}.button.setOverrideFalse`)
         : game.i18n.localize(`${MODULE_ABBREV}.button.setOverrideTrue`)
@@ -28,16 +28,16 @@ export function addFavoriteControls(
         const closestItemLi = $(e.target).parents('[data-item-id]')[0]; // BRITTLE
         const itemId = closestItemLi.dataset.itemId;
         const relevantItem = app.object.items.get(itemId);
-        const existingFilterOverride = relevantItem.getFlag(MODULE_ID, MyFlags.filterOverride);
+        const currentFilter = isItemInActionList(relevantItem);
 
         // set the flag to be the opposite of what it is now
-        relevantItem.setFlag(MODULE_ID, MyFlags.filterOverride, !existingFilterOverride);
+        relevantItem.setFlag(MODULE_ID, MyFlags.filterOverride, !currentFilter);
 
         log(false, 'a.item-action-filter-override click registered', {
           closestItemLi,
           itemId,
           relevantItem,
-          existingFilterOverride,
+          currentFilter,
         });
       } catch (e) {
         log(true, 'Error trying to set flag on item', e);
@@ -50,18 +50,11 @@ export function addFavoriteControls(
 
       const relevantItem = app.object.items.get(itemId);
 
-      const filterOverride = relevantItem.getFlag(MODULE_ID, MyFlags.filterOverride);
+      const currentFilter = isItemInActionList(relevantItem);
 
-      log(false, { itemId, filterOverride });
+      log(false, { itemId, currentFilter });
 
-      $(element).find('.item-controls').append(createFavButton(filterOverride));
+      $(element).find('.item-controls').append(createFavButton(currentFilter));
     });
   }
 }
-
-// if (app.options.editable) {
-//   html.find('.spellbook .item-controls').css('flex', '0 0 88px');
-//   html.find('.inventory .item-controls').css('flex', '0 0 88px');
-//   html.find('.features .item-controls').css('flex', '0 0 66px');
-//   html.find('.favourite .item-controls').css('flex', '0 0 22px');
-// }

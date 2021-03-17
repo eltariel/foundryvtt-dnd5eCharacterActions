@@ -30,11 +30,20 @@
     display: none;
   }
 
-  &.included {
+  &.active {
     &:hover {
       .fa-star {
         font-weight: 400;
       }
+    }
+  }
+}
+
+/* Tidy Specifc override */
+.context-menu {
+  .item-action-filter-override {
+    .control-label {
+      display: unset;
     }
   }
 }
