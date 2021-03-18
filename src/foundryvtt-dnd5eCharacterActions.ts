@@ -1,7 +1,7 @@
 // Import TypeScript modules
 import { registerSettings } from './module/settings';
 import { MODULE_ABBREV, MODULE_ID, MySettings, TEMPLATES } from './module/constants';
-import { log } from './module/helpers';
+import { isItemInActionList, log } from './module/helpers';
 import { getActorActionsData } from './module/getActorActionsData';
 import { addFavoriteControls } from './module/handleFavoriteControls';
 
@@ -15,8 +15,7 @@ Handlebars.registerHelper(`${MODULE_ABBREV}-isEmpty`, (input: Object | Array<any
   return isObjectEmpty(input);
 });
 
-// deprecated
-const actionsActionsListRenderers = new Set();
+Handlebars.registerHelper(`${MODULE_ABBREV}-isItemInActionList`, isItemInActionList);
 
 /**
  * Add the Actions Tab to Sheet HTML. Returns early if the character-actions-dnd5e element already exists
@@ -59,13 +58,6 @@ async function addActionsTab(
 }
 
 async function renderActionsList(actorData: Actor5eCharacter, appId?: number) {
-  if (!!appId) {
-    actionsActionsListRenderers.add(appId); // deprecated
-    console.warn(
-      'providing the appId to ActionsList5e is deprecated with Character Actions List 2.0.0 and will be removed in a future update, check if your sheet module has an update'
-    );
-  }
-
   const data = await getActorActionsData(actorData);
 
   log(false, 'renderActionsList', {
@@ -96,29 +88,22 @@ Hooks.once('init', async function () {
 });
 
 // default sheet injection if this hasn't yet been injected
-Hooks.on('renderActorSheet5e', (app, html, data) => {
+Hooks.on('renderActorSheet5e', async (app, html, data) => {
   log(false, 'default sheet open hook firing', {
     app,
     html,
     data,
   });
 
-  addFavoriteControls(app, html, data);
-
-  // Deprecated
-  if (actionsActionsListRenderers.has(app.appId)) {
-    return;
-  }
-
   const actionsList = $(html).find('.character-actions-dnd5e');
 
   log(false, 'actionsListExists', { actionsListExists: actionsList.length });
 
-  if (!!actionsList.length) {
-    return;
+  if (!actionsList.length) {
+    await addActionsTab(app, html, data);
   }
 
-  addActionsTab(app, html, data);
+  addFavoriteControls(app, html, data);
 });
 
 Hooks.once('devModeReady', ({ registerPackageDebugFlag }) => {

@@ -31,3 +31,11 @@
 .to-hit-cell {
   flex-basis: 100px;
 }
+
+.item-controls {
+  text-align: center;
+
+  &:not(.context-menu) {
+    flex: 0 0 44px;
+  }
+}

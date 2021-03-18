@@ -13,11 +13,17 @@ export function addFavoriteControls(
       filterOverride
         ? game.i18n.localize(`${MODULE_ABBREV}.button.setOverrideFalse`)
         : game.i18n.localize(`${MODULE_ABBREV}.button.setOverrideTrue`)
-    }"><i class="fas ${filterOverride ? 'fa-star' : 'fa-sign-in-alt'}"></i> <span class="control-label">${
-      filterOverride
-        ? game.i18n.localize(`${MODULE_ABBREV}.button.setOverrideFalse`)
-        : game.i18n.localize(`${MODULE_ABBREV}.button.setOverrideTrue`)
-    }</span></a>`;
+    }">
+      <i class="fas fa-fist-raised">
+        <i class="fas fa-slash"></i>
+        <i class="fas fa-plus"></i>
+      </i>
+      <span class="control-label">${
+        filterOverride
+          ? game.i18n.localize(`${MODULE_ABBREV}.button.setOverrideFalse`)
+          : game.i18n.localize(`${MODULE_ABBREV}.button.setOverrideTrue`)
+      }</span>
+    </a>`;
   }
 
   // add button to toggle favourite of the item in their native tab

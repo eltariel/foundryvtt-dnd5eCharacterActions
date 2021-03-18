@@ -7,6 +7,9 @@
 
   <div class="item-detail to-hit-cell">{{localize "CAL5E.HitDC"}}</div>
   <div class="item-detail damage-cell">{{localize "DND5E.Damage"}}</div>
+  <div class="item-controls">
+    <i class="fas fa-fist-raised"></i>
+  </div>
 </li>
 <ol class="item-list">
   {{#each items as |item|}}
@@ -59,6 +62,10 @@
 
     <div class="item-detail damage-cell">
       <span title="{{labels.damage}} {{labels.damageTypes}}">{{labels.damage}} {{labels.damageTypes}}</span>
+    </div>
+
+    <div class="item-controls">
+      {{!-- Control is Injected in handleFavoriteControls.ts --}}
     </div>
   </li>
   {{/each}}
