@@ -65,7 +65,10 @@ async function renderActionsList(actorData: Actor5eCharacter, appId?: number) {
     data,
   });
 
-  return renderTemplate(`modules/${MODULE_ID}/templates/actor-actions-list.hbs`, data);
+  return renderTemplate(`modules/${MODULE_ID}/templates/actor-actions-list.hbs`, {
+    ...data,
+    abilities: game.dnd5e.config.abilityAbbreviations,
+  });
 }
 
 /* ------------------------------------ */

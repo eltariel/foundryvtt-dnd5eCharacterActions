@@ -53,7 +53,8 @@
     <div class="item-detail to-hit-cell">
       {{#if (or labels.save labels.toHit)}}
       {{#unless (or (eq labels.save "") (eq labels.save undefined))}}
-      <span title="{{labels.save}}">{{labels.save}}</span>
+      <span title="{{labels.save}}">{{localize DND5E.AbbreviationDC}} {{data.data.save.dc}}</span>
+      <small>{{lookup @root/abilities data.data.save.ability}}</small>
       {{else}}
       <span title="{{labels.toHit}}">{{labels.toHit}}</span>
       {{/unless}}

@@ -29,7 +29,10 @@
 }
 
 .to-hit-cell {
-  flex-basis: 100px;
+  flex-basis: 60px;
+  flex-direction: column;
+  display: flex;
+  text-transform: capitalize;
 }
 
 .item-controls {
