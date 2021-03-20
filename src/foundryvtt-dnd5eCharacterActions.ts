@@ -30,7 +30,7 @@ async function addActionsTab(
   const existingActionsList = $(html).find('.character-actions-dnd5e');
 
   // check if what is rendering this is an Application and if our Actions List exists within it already
-  if (!!app.appId && !!existingActionsList.length) {
+  if ((!!app.appId && !!existingActionsList.length) || app.options.blockActionsTab) {
     return;
   }
 
@@ -57,7 +57,12 @@ async function addActionsTab(
   actionsTabHtml.find('.item .item-recharge').click((event) => app._onItemRecharge(event));
 }
 
-async function renderActionsList(actorData: Actor5eCharacter, appId?: number) {
+async function renderActionsList(
+  actorData: Actor5eCharacter,
+  options?: {
+    rollIcon?: string;
+  }
+) {
   const actionData = await getActorActionsData(actorData);
 
   log(false, 'renderActionsList', {
@@ -72,6 +77,7 @@ async function renderActionsList(actorData: Actor5eCharacter, appId?: number) {
       ...game.dnd5e.config.abilityActivationTypes,
       other: game.i18n.localize(`DND5E.ActionOther`),
     },
+    rollIcon: options?.rollIcon,
   });
 }
 
@@ -87,11 +93,35 @@ Hooks.once('init', async function () {
   // Preload Handlebars templates
   await loadTemplates(Object.values(flattenObject(TEMPLATES)));
 
-  globalThis[MODULE_ABBREV] = {
+  game.modules.get(MODULE_ID).api = {
     renderActionsList,
+    isItemInActionList,
   };
 
-  Hooks.call(`CharacterActions5eReady`);
+  globalThis[MODULE_ABBREV] = {
+    renderActionsList: async function (...args) {
+      log(false, {
+        api: game.modules.get(MODULE_ID).api,
+      });
+
+      console.warn(
+        MODULE_ID,
+        '|',
+        'accessing the module api on globalThis is deprecated and will be removed in a future update, check if there is an update to your sheet module'
+      );
+      return game.modules.get(MODULE_ID).api?.renderActionsList(...args);
+    },
+    isItemInActionList: function (...args) {
+      console.warn(
+        MODULE_ID,
+        '|',
+        'accessing the module api on globalThis is deprecated and will be removed in a future update, check if there is an update to your sheet module'
+      );
+      return game.modules.get(MODULE_ID).api?.isItemInActionList(...args);
+    },
+  };
+
+  Hooks.call(`CharacterActions5eReady`, game.modules.get(MODULE_ID).api);
 });
 
 // default sheet injection if this hasn't yet been injected

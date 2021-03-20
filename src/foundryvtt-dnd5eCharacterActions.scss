@@ -69,10 +69,20 @@
 }
 
 /* Tidy Specifc override */
-.context-menu {
-  .item-action-filter-override {
-    .control-label {
-      display: unset;
+.tidy5e-sheet {
+  .context-menu {
+    .item-action-filter-override {
+      .control-label {
+        display: unset;
+      }
+    }
+  }
+
+  .character-actions-dnd5e {
+    .items-header {
+      .item-controls {
+        display: none;
+      }
     }
   }
 }
