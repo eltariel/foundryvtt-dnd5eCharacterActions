@@ -37,8 +37,5 @@
 
 .item-controls {
   text-align: center;
-
-  &:not(.context-menu) {
-    flex: 0 0 44px;
-  }
+  flex: 0 0 2em;
 }
