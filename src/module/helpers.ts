@@ -13,6 +13,7 @@ export function getActivationType(activationType?: string) {
   switch (activationType) {
     case 'action':
     case 'bonus':
+    case 'crew':
     case 'reaction':
       return activationType;
 

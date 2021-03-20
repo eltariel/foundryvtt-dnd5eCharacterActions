@@ -8,7 +8,6 @@
   <div class="item-detail to-hit-cell">{{localize "CAL5E.HitDC"}}</div>
   <div class="item-detail damage-cell">{{localize "DND5E.Damage"}}</div>
   <div class="item-controls">
-    <i class="fas fa-fist-raised"></i>
   </div>
 </li>
 <ol class="item-list">
@@ -75,15 +74,7 @@
 {{/inline}}
 
 <ol class="character-actions-dnd5e items-list inventory-list">
-  {{!-- Actions --}}
-  {{> action-sublist items=action label=(localize "DND5E.Action") }}
-
-  {{!-- Bonus Actions --}}
-  {{> action-sublist items=bonus label=(localize "DND5E.BonusAction") }}
-
-  {{!-- Reactions --}}
-  {{> action-sublist items=reaction label=(localize "DND5E.Reaction") }}
-
-  {{!-- Other --}}
-  {{> action-sublist items=other label=(localize "DND5E.ActionOther") }}
+  {{#each actionData as |data key| }}
+  {{> action-sublist items=data label=(lookup @root/activationTypes key) }}
+  {{/each}}
 </ol>

@@ -58,16 +58,20 @@ async function addActionsTab(
 }
 
 async function renderActionsList(actorData: Actor5eCharacter, appId?: number) {
-  const data = await getActorActionsData(actorData);
+  const actionData = await getActorActionsData(actorData);
 
   log(false, 'renderActionsList', {
     actorData,
-    data,
+    data: actionData,
   });
 
   return renderTemplate(`modules/${MODULE_ID}/templates/actor-actions-list.hbs`, {
-    ...data,
+    actionData,
     abilities: game.dnd5e.config.abilityAbbreviations,
+    activationTypes: {
+      ...game.dnd5e.config.abilityActivationTypes,
+      other: game.i18n.localize(`DND5E.ActionOther`),
+    },
   });
 }
 

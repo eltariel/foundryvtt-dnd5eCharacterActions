@@ -3,7 +3,10 @@ import { getActivationType, isItemInActionList, log } from './helpers';
 export function getActorActionsData(actor: Actor5eCharacter) {
   const filteredItems = actor.items.filter(isItemInActionList);
 
-  const actionsData: Record<'action' | 'bonus' | 'reaction' | 'other', Set<Partial<Item5e>>> = filteredItems.reduce(
+  const actionsData: Record<
+    'action' | 'bonus' | 'crew' | 'reaction' | 'other',
+    Set<Partial<Item5e>>
+  > = filteredItems.reduce(
     (acc, item: Item5e) => {
       try {
         log(false, 'digesting item', {
@@ -23,6 +26,7 @@ export function getActorActionsData(actor: Actor5eCharacter) {
     {
       action: new Set(),
       bonus: new Set(),
+      crew: new Set(),
       reaction: new Set(),
       other: new Set(),
     }
