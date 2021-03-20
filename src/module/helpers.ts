@@ -1,4 +1,4 @@
-import { MODULE_ID, MyFlags, MySettings } from './constants';
+import { MODULE_ABBREV, MODULE_ID, MyFlags, MySettings } from './constants';
 
 export function log(force: boolean, ...args) {
   //@ts-ignore
@@ -36,13 +36,23 @@ export function isItemInActionList(item: Item5e) {
   log(false, 'filtering item', {
     item,
   });
+
+  // check our override
   const override = item.getFlag(MODULE_ID, MyFlags.filterOverride);
 
-  // ignore this if the override hasn't been set
   if (override !== undefined) {
     return override;
   }
 
+  // check the old flags
+  const isFavourite = item.getFlag('favtab', 'isFavourite'); // favourite items tab
+  const isFavorite = item.getFlag('favtab', 'isFavorite'); // tidy 5e sheet
+
+  if (isFavourite || isFavorite) {
+    return true;
+  }
+
+  // perform normal filtering logic
   switch (item.type) {
     case 'weapon': {
       return item.data.data.equipped;

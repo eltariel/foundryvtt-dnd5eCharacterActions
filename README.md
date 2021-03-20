@@ -64,6 +64,8 @@ class MyCoolCharacterSheet extends ActorSheet5e {
 }
 ```
 
+### Handlebars Helper: `CAL5E-isItemInActionList`
+// TODO: Details
 
 ### Compatibility
 
